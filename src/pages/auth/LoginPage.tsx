@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { loginUser } from "../../api/auth.api";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import { useState } from "react";
 
 interface LoginData {
     email: string;
@@ -18,11 +19,13 @@ interface LoginData {
 }
 
 function LoginPage() {
-    const { register, handleSubmit, setError, formState: { errors }} = useForm<LoginData>()
+    const { register, handleSubmit, setError, clearErrors, formState: { errors }} = useForm<LoginData>()
     const { login } = useAuth();
     const navigate = useNavigate();
+    const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(null);
 
     const onSubmit = async (data: LoginData) => {
+        clearErrors();
         try {
             const response = await loginUser(data);
             const token = response.data.acces_token;
@@ -34,7 +37,7 @@ function LoginPage() {
             if (axios.isAxiosError(err) && err.status === 401) {
                 const message: string = err.response?.data?.message;
 
-                setError('credentials', { type: 'server', message});
+                setServerErrorMessage(message);
             }
 
             if (axios.isAxiosError(err) && err.status === 400) {
@@ -69,7 +72,7 @@ function LoginPage() {
                 }}
                 onSubmit={handleSubmit(onSubmit)}
                 >
-                { errors.credentials && <p style={{color: 'red', fontSize: '14px', fontWeight: '200', textAlign: 'center'}}>{errors.credentials.message}</p>}
+                { serverErrorMessage && <p style={{color: 'red', fontSize: '14px', fontWeight: '200', textAlign: 'center'}}>{serverErrorMessage}</p>}
                 <div>
                     <MyInput 
                         icon={<IoIosMail />} 
@@ -91,7 +94,7 @@ function LoginPage() {
 
                 <span style={{ width: '100%', textAlign: 'right', fontWeight: '500'}}>¿Olvidaste tu contraseña?</span>
 
-                <MyButton variant="primary">Continuar</MyButton>
+                <MyButton variant="primary" type="submit">Continuar</MyButton>
 
                 <span style={{ width: '100%', textAlign: 'center', color: '#8C9092'}}>o continuar con</span>
                 <MyButton variant="secondary" style={{ display: 'flex', justifyContent: 'center', gap: '10px'}}><span style={{ display: 'flex', fontSize: '18px'}}><FcGoogle /></span> Google</MyButton>

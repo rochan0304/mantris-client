@@ -102,6 +102,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
                 setIsLoading(false);
             }
         }
+        setIsLoading(false);
     }, [])
 
     const contextValue: AuthContextType = {

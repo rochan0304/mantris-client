@@ -1,4 +1,3 @@
-import type React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -9,7 +8,7 @@ interface RolesUser {
 };
 
 const ProtectedRoute = ({allowedRoles}: RolesUser) => {
-    const { isLoggedIn, isLoading, user, logout } = useAuth();
+    const { isLoggedIn, isLoading, user } = useAuth();
 
     if (isLoading) {
         return ( 
