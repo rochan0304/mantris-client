@@ -1,0 +1,6 @@
+.swiper-pagination-bullet {
+  background-color: #A6FF00 !important;
+  opacity: 1; /* Para que no se vea transparente si no quieres */
+  width: 10px;
+  height: 10px;
+}
