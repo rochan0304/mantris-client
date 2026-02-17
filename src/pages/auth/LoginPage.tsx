@@ -35,10 +35,12 @@ function LoginPage() {
                 navigate('/home');
             }
         } catch (err) {
+            console.log(err);
             if (axios.isAxiosError(err) && err.status === 401) {
                 const message: string = err.response?.data?.message;
 
                 setServerErrorMessage(message);
+                alert(`Error: ${err.message}`);
             }
 
             if (axios.isAxiosError(err) && err.status === 400) {
@@ -52,9 +54,9 @@ function LoginPage() {
                     if (msg.toLowerCase().includes('contraseña')) {
                         setError('password', { type: 'server', message: msg });
                     }
+                    alert(`Error: ${err.message}`);
                 });
             }
-            alert(`Error: ${err}`);
         }
     }
     return (
