@@ -21,6 +21,7 @@ interface LoginData {
 function LoginPage() {
     const { register, handleSubmit, setError, clearErrors, formState: { errors }} = useForm<LoginData>()
     const { login } = useAuth();
+
     const navigate = useNavigate();
     const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(null);
 
@@ -53,6 +54,7 @@ function LoginPage() {
                     }
                 });
             }
+            alert(`Error: ${err}`);
         }
     }
     return (
