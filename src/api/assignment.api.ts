@@ -22,3 +22,7 @@ interface IncomeAssignmentResponse extends AxiosInstance {
 export const incomeAssignment = (data: any): Promise<IncomeAssignmentResponse> => {
     return assignmentApi.patch('/income', data);
 }
+
+export const deleteAssignment = (id: string) => {
+    return assignmentApi.delete(`/${id}`);
+}

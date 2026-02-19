@@ -11,10 +11,12 @@ import AssignmentCard from "../../../components/ui/AssignmentCard";
 import { createAssignment } from "../../../api/assignment.api";
 import type { CreateAssignmentData } from "../../../types/assignment.type";
 import { useNavigate } from "react-router-dom";
+import { useLoading } from "../../../context/LoadingContext";
 
 function CreateAssignment () {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const { showLoading, hideLoading } = useLoading();
 
     const symbolCurrency: string = user!.baseCurrency.symbol;
     const setTitle = useTitleContext();
@@ -22,10 +24,11 @@ function CreateAssignment () {
     const [ formData, setFormData ] = useState<CreateAssignmentData>({
         name: '',
         type: '',
-        assignedAmount: formatter.format(0),
+        assignedAmount: Number(formatter.format(0)),
     });
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        showLoading();
         e.preventDefault();
 
         const form = new FormData(e.currentTarget);
@@ -37,13 +40,15 @@ function CreateAssignment () {
             navigate(-1);
         } catch (error) {
             console.log(error);
+        } finally {
+            hideLoading();
         }
     };
     
     const handlheChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(prev => ({
             ...prev,
-            [e.target.name]: e.target.type === 'number' ? formatter.format(+e.target.value) : e.target.value,
+            [e.target.name]: e.target.type === 'number' ? e.target.valueAsNumber : e.target.value,
         }));
     };
 

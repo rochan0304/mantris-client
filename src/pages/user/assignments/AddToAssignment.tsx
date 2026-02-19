@@ -11,6 +11,7 @@ import AssignmentCard from "../../../components/ui/AssignmentCard";
 import styles from './AddToAssignment.module.css';
 import { formatter } from "../Home";
 import { GoArrowLeft } from "react-icons/go";
+import { useLoading } from "../../../context/LoadingContext";
 
 interface UnassignedBalanceResponse {
     unassignedAmount: string;
@@ -18,6 +19,8 @@ interface UnassignedBalanceResponse {
 
 function AddToAssignment() {
     const { user } = useAuth();
+    const { showLoading, hideLoading } = useLoading();
+
     const [ unassignedAmount, setUnassignedAmount ] = useState('0.00');
     const [ customUnassignedAmount, setCustomUnassignedAmount ] = useState('0.00');
     const [ amountColor, setAmountColor ] = useState('#8F9395');
@@ -85,6 +88,7 @@ function AddToAssignment() {
     };
 
     useEffect(() => {
+        showLoading();
         setTitle('Asignando...')
         const assignments = async () => {
             try {
@@ -110,6 +114,8 @@ function AddToAssignment() {
                 setCustomUnassignedAmount(data.unassignedAmount);
             } catch (error) {
                 console.log(error);
+            } finally {
+                hideLoading();
             }
         }
 
@@ -120,7 +126,7 @@ function AddToAssignment() {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div style={{ padding: '0 20px'}}>
-                <div style={{ display: 'flex', backgroundColor: '#192126', borderRadius: '10px' }}>
+                <div style={{ display: 'flex', backgroundColor: '#192126', borderRadius: '10px', overflowX: 'auto' }}>
                     <CheckBoxInput 
                         value="FIJO" 
                         style={{ flex: '1', justifyContent: 'center'}} 
@@ -183,7 +189,8 @@ function AddToAssignment() {
                         justifyContent: 'center',
                         alignItems: 'center',
                         gap: '10px',
-                        background: 'linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))'
+                        background: 'linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
+                        zIndex: '0'
                     }}
                 >
                     <p 

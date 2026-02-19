@@ -11,6 +11,7 @@ import { loginUser } from "../../api/auth.api";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
+import { useLoading } from "../../context/LoadingContext";
 
 interface LoginData {
     email: string;
@@ -21,11 +22,13 @@ interface LoginData {
 function LoginPage() {
     const { register, handleSubmit, setError, clearErrors, formState: { errors }} = useForm<LoginData>()
     const { login } = useAuth();
+    const { showLoading, hideLoading } = useLoading();
 
     const navigate = useNavigate();
     const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(null);
 
     const onSubmit = async (data: LoginData) => {
+        showLoading();
         clearErrors();
         try {
             const response = await loginUser(data);
@@ -35,6 +38,7 @@ function LoginPage() {
                 navigate('/home');
             }
         } catch (err) {
+            console.log(err);
             if (axios.isAxiosError(err) && err.status === 401) {
                 const message: string = err.response?.data?.message;
 
@@ -54,6 +58,8 @@ function LoginPage() {
                     }
                 });
             }
+        } finally {
+            hideLoading();
         }
     }
     return (

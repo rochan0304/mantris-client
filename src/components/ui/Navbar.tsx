@@ -12,7 +12,6 @@ type Pages = '/home' | '/assignment' | '/account' | '/exit';
 const Navbar = () => {
     const location = useLocation();
     const { logout } = useAuth();
-    console.log(logout);
     const isActive = (path: Pages) => location.pathname === path;
 
     return(

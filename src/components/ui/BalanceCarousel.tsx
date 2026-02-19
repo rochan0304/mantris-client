@@ -33,7 +33,6 @@ const BalanceCarousel: React.FC = () => {
             try {
                 const response = await getBalanceSummary();
                 const data = response.data;
-                console.log(data)
 
                 setTotalByCurrency(data);
                 setConvertedBalances(data[indice].convertedBalance);
@@ -44,6 +43,14 @@ const BalanceCarousel: React.FC = () => {
         
         balanceSummary();
     }, []);
+
+    if (!totalByCurrency) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 0' }}>
+                <img src="/loader.svg" alt="Cargando" width={'80px'} />
+            </div>
+        )
+    }
 
     return (
         <Swiper

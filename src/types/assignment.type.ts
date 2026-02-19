@@ -2,12 +2,12 @@ import type { AxiosInstance } from "axios";
 
 export interface CreateAssignmentData {
     name: string;
-    assignedAmount: string;
+    assignedAmount: number;
     type: string;
 }
 
 export interface AssignmentData {
-    assignedAmount: string;
+    assignedAmount: number;
     availableBalance: string;
     id: string;
     name: string;

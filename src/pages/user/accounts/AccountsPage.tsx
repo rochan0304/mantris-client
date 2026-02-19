@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CheckBoxInput from "../../../components/ui/CheckboxInput";
 import { useAuth } from "../../../context/AuthContext";
 import { useTitleContext } from "../../../layouts/ModuleLayout";
-import { getAccounts } from "../../../api/account.api";
+import { deleteAccount, getAccounts } from "../../../api/account.api";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import MyButton from "../../../components/ui/MyButton";
 import { CgArrowsExchange } from "react-icons/cg";
@@ -11,10 +11,14 @@ import { GoPlus } from "react-icons/go";
 import type { AccountType } from "../../../types/accounts.type";
 import { useRates } from "../../../context/ExchangeRatesContext";
 import AccountCard from "../../../components/ui/AccountCard";
+import { useLoading } from "../../../context/LoadingContext";
+import { FaRegTrashAlt } from "react-icons/fa";
+import styles from "./AccountsPage.module.css";
 
 function AccountsPage() {
     const { user } = useAuth();
     const useTitle = useTitleContext();
+    const { showLoading, hideLoading } = useLoading();
 
     const rates = useRates();
 
@@ -26,20 +30,50 @@ function AccountsPage() {
     const [ totalByCurrency, setTotalByCurrency ] = useState<any>();
     const [ shownAccounts, setShownAccounts ] = useState<AccountType[]>([]);
 
+    const [ clicked, setClicked ] = useState(false);
+    const [ accountIdClicked, setAccountIdClicked ] = useState<string | undefined>(undefined);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentCurrency(e.target.value);
         
         filterAccounts(e.target.value, accounts!);
     }
+
+    const handleClick = (id?: string) => {
+        setClicked(prev => !prev);
+        if (id) {
+            setAccountIdClicked(id);
+        } else {
+            setAccountIdClicked(undefined);
+        }
+    };
     
     const filterAccounts = (currency: string, accounts: AccountType[]) => {
         const filteredAccounts = accounts.filter(account => account.currency === currency);
         setShownAccounts(filteredAccounts);
     }
+
+    const handleDelete = async () => {
+        showLoading()
+        console.log(accountIdClicked);
+        try {
+            if (accountIdClicked) {
+                await deleteAccount(accountIdClicked);
+                setAccounts(prev => prev?.filter(account => account.id !== accountIdClicked));
+                filterAccounts(currentCurrency, accounts!.filter(account => account.id !== accountIdClicked));
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setClicked(false);
+            hideLoading();
+        }
+    }
     
     useEffect(() => {
         useTitle('Mis Cuentas');
         const accounts = async () => {
+            showLoading();
             try {
                 const response = await getAccounts();
                 const data = response.data;
@@ -48,6 +82,8 @@ function AccountsPage() {
                 setTotalByCurrency(data.totalByCurrencies);
             } catch (error) {
                 console.log(error);
+            } finally {
+                hideLoading();
             }
         };
         
@@ -160,13 +196,57 @@ function AccountsPage() {
             
             <section style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
                 { shownAccounts.map(account => (
-                    <AccountCard 
-                        key={account.id}
-                        accountId={account.id} 
-                        accountName={account.name} 
-                        accountBalance={account.balance}
-                        symbol={rates?.currencies[account.currency].symbol}
-                    />
+                    <div key={account.id} 
+                        style={{ 
+                            display: 'flex',
+                            position: 'relative', 
+                            height: '127px', 
+                            alignItems: 'center',
+                            overflow: 'hidden'
+                        }}
+                    >
+                        <AccountCard 
+                            accountId={account.id} 
+                            accountName={account.name} 
+                            accountBalance={account.balance}
+                            symbol={rates?.currencies[account.currency].symbol}
+                            className={ styles.card }
+                        />
+                        <div
+                            className={ styles.delete } 
+                            style={{
+                                color: 'red',
+                            }}
+                            onClick={() => handleClick(account.id)}
+                        >
+                            <FaRegTrashAlt fontSize={'20px'}/>
+                        </div>
+                        <div style={{
+                            position: 'fixed',
+                            top: '0',
+                            left: '0',
+                            width: '100vw',
+                            height: '100dvh',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transform: clicked ? 'translate(0)' : 'translate(100%)',
+                            opacity: clicked ? '1' : '0',
+                            backgroundColor: 'rgba(0,0,0,0.1)',
+                        }}>
+                            <div style={{
+                                backgroundColor: '#192126',
+                                padding: '20px',
+                                borderRadius: '10px'
+                            }}>
+                                <p>¿Desea eliminar esta cuenta?</p>
+                                <div style={{ display: 'flex', gap: '10px', marginTop: '15px'}}>
+                                    <MyButton style={{ backgroundColor: 'rgb(171, 0, 0)', color: 'white' }} onClick={handleDelete}>Eliminar</MyButton>
+                                    <MyButton variant="secondary" onClick={handleClick} style={{ backgroundColor: '#252C31'}}>Cancelar</MyButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 ))}
             </section>
         </div>

@@ -8,17 +8,21 @@ import { IoIosLock } from "react-icons/io";
 import { registerUser } from "../../api/auth.api";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useLoading } from "../../context/LoadingContext";
 
 interface RegisterForm {
     email: string;
     password: string;
+    passwordVerify: string;
 }
 
 function RegisterPage() {
     const {register, handleSubmit, setError, formState: {errors} } = useForm<RegisterForm>()
     const navigate = useNavigate();
+    const { showLoading, hideLoading } = useLoading();
 
     const onSubmit = async (data: RegisterForm ) => {
+        showLoading();
         try {
             await registerUser(data);
             navigate('/login');
@@ -40,6 +44,8 @@ function RegisterPage() {
                 const msg: string = err.response.data.message;
                 setError('email', {type: 'server', message: msg });
             }
+        } finally {
+            hideLoading();
         }
     }
 
@@ -75,6 +81,15 @@ function RegisterPage() {
                         placeholder="Contraseña" 
                         type="password" 
                         { ...register('password')}
+                    />
+                    { errors.password && <p style={{color: 'red', fontSize: '14px', fontWeight: '200', paddingTop: '5px'}}>{errors.password.message}</p>}
+                </div>
+                <div>
+                    <MyInput 
+                        icon={<IoIosLock />} 
+                        placeholder="Confirmar contraseña" 
+                        type="password" 
+                        { ...register('passwordVerify')}
                     />
                     { errors.password && <p style={{color: 'red', fontSize: '14px', fontWeight: '200', paddingTop: '5px'}}>{errors.password.message}</p>}
                 </div>

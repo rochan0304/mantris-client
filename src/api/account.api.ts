@@ -15,3 +15,7 @@ export const createAccount = (data: CreateAccountData) => {
 export const getBalanceSummary = (): Promise<GetBalanceSummaryResponse> => {
     return accountsApi.get('/summary');
 }
+
+export const deleteAccount = (id: string) => {
+    return accountsApi.delete(`/${id}`);
+}

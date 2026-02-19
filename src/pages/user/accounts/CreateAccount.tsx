@@ -7,9 +7,11 @@ import MyButton from "../../../components/ui/MyButton";
 import { useTitleContext } from "../../../layouts/ModuleLayout";
 import { createAccount } from "../../../api/account.api";
 import type { CreateAccountData } from "../../../types/accounts.type";
+import { useLoading } from "../../../context/LoadingContext";
 
 function CreateAccount() {
     const location = useLocation();
+    const { showLoading, hideLoading } = useLoading();
 
     const navigate = useNavigate();
 
@@ -39,15 +41,16 @@ function CreateAccount() {
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        showLoading();
         e.preventDefault();
-
-        console.log(formData);
 
         try {
             const response = await createAccount(formData); 
             navigate('/account', { state: currentCurrency })
         } catch (error) {
             console.log(error)
+        } finally {
+            hideLoading();
         }
     }
 
@@ -63,7 +66,7 @@ function CreateAccount() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
                 <label htmlFor="currentBalance">Monto inicial</label>
-                <MyInput currency={ currentCurrency } type="number" placeholder="0.00" name="currentBalance" onChange={handleChangeInput}/>
+                <MyInput currency={ currentCurrency } type="number" placeholder="0.00" name="currentBalance" onChange={handleChangeInput} step='any'/>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>

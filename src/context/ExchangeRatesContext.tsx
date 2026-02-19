@@ -45,7 +45,6 @@ export const ExchangeRatesContext: React.FC<ExchangeRatesProviderProps> = ({ chi
                 const response = await getAllRates();
                 const data = response.data;
                 setRates(data);
-                localStorage.setItem('app-rates', JSON.stringify(data));
             } catch (error) {
                 console.log(error);
             }
