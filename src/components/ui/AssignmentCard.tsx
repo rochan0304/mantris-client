@@ -5,6 +5,7 @@ import styles from "./AssignmentCard.module.css";
 import { useRef, useState } from "react";
 import type { AssignmentData } from "../../types/assignment.type";
 import { incomeAssignment } from "../../api/assignment.api";
+import { useLoading } from "../../context/LoadingContext";
 
 interface AssignmentCardProps extends React.ComponentPropsWithoutRef<'div'> {
     currency: string;
@@ -25,6 +26,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
     style, 
     ...props 
 }) => {
+    const { showLoading, hideLoading } = useLoading();
     const [ clicked, setClicked ] = useState<boolean>(false);
 
     const [ formData, setFormData ] = useState({
@@ -42,6 +44,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        showLoading();
         e.preventDefault();
 
         
@@ -65,6 +68,8 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
             }));
         } catch (error) {
             console.error(error);
+        } finally {
+            hideLoading();
         }
     }
 

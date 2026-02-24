@@ -14,6 +14,7 @@ import { getAllRates } from "../../../api/exchangeRates.api";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { getAssignments } from "../../../api/assignment.api";
 import type { AssignmentData } from "../../../types/assignment.type";
+import { useLoading } from "../../../context/LoadingContext";
 
 
 function CreateSpent() {
@@ -21,6 +22,7 @@ function CreateSpent() {
     
     const location = useLocation();
     const navigate = useNavigate();
+    const { showLoading, hideLoading } = useLoading();
 
     const setTitle = useTitleContext();
 
@@ -45,8 +47,8 @@ function CreateSpent() {
     const [ shownAssignments, setShownAssignments ] = useState<AssignmentData[]>();
     
     const convertAmount = (amount: number, origin: number) => {
-        const convertedAmount = + ((amount * origin) / rates[user!.baseCurrency.id]).toFixed(2);
-        return convertedAmount;
+        const convertedAmount = ((amount * origin) / rates[user!.baseCurrency.id]).toFixed(2);
+        return Number(convertedAmount);
     };
 
     const filterAccounts = (currency: string, accounts: AccountType[]) => {
@@ -101,6 +103,7 @@ function CreateSpent() {
 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        showLoading();
         e.preventDefault();
         console.log(formData);
 
@@ -109,6 +112,8 @@ function CreateSpent() {
             console.log(response);
         } catch (error) {
             console.log(error);
+        } finally {
+            hideLoading();
         }
     };
 
@@ -189,7 +194,7 @@ function CreateSpent() {
                     Gasto
                 </Link>
             </div>
-            <form onSubmit={ handleSubmit } style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
+            <form onSubmit={ handleSubmit } style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ padding: '20px 0'}}>
                     <MyInput variant="number" type="number" step='any' placeholder="0.00" name="amount" onChange={ handleAmount } style={{ padding: '10px'}} value={ formData.amount ? formData.amount : '' }/>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '16px', color: '#8F9395'}}>

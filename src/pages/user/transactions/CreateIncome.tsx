@@ -12,10 +12,12 @@ import { createIncome } from "../../../api/transaction.api";
 import type { CreateIncomeData } from "../../../types/transactions.type";
 import { getAllRates } from "../../../api/exchangeRates.api";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import { useLoading } from "../../../context/LoadingContext";
 
 
 function CreateIncome() {
     const { user } = useAuth();
+    const { showLoading, hideLoading } = useLoading();
     
     const location = useLocation();
     const navigate = useNavigate();
@@ -80,14 +82,16 @@ function CreateIncome() {
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        showLoading();
         e.preventDefault();
-        console.log(formData);
 
         try {
             await createIncome(formData);
             navigate('/account', { state: formData.currencyId })
         } catch (error) {
             console.log(error);
+        } finally {
+            hideLoading();
         }
     };
 

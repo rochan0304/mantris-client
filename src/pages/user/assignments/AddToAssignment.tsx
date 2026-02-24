@@ -227,7 +227,7 @@ function AddToAssignment() {
                             calculateUnassignedBalance={ handleCustomUnassignedAmount }
                             resetAmount={ handleReset }
                             setUnassignedBox={ handleUnassignedAmount }
-                            style={{ }}
+                            style={{ border: '1px solid rgba(166, 255, 0, 0.8)'}}
                         />
                     </CheckBoxInput>
                 ))}

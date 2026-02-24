@@ -48,23 +48,6 @@ function Home() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <BalanceCarousel />
             <section style={{display: 'flex', flexDirection: 'column', gap: '15px', padding: '0 20px'}}>
-                <div 
-                    style={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between',
-                        padding: '20px',
-                        borderRadius: '20px',
-                        border: '1px solid #949494',
-                        alignItems: 'center'
-                    }}
-                >
-                    <div>
-                        <p style={{ opacity: '0.6', fontSize: '14px', fontWeight: '200' }}>Sin asignar</p>
-                    </div>
-                    <span>
-                        <IoIosArrowForward fontSize={'24px'} color="#949494"/>
-                    </span>
-                </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
                     <Link to='/income' 
                         style={{ 
