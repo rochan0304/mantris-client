@@ -1,26 +1,11 @@
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { GoArrowUpRight } from "react-icons/go";
 import { GoArrowDownRight } from "react-icons/go";
-import { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { IoIosArrowForward } from "react-icons/io";
+import { useEffect } from "react";
 import { useTitleContext } from "../../layouts/ModuleLayout";
 import BalanceCarousel from "../../components/ui/BalanceCarousel";
-import { getBalanceSummary } from "../../api/account.api";
 import { useRates } from "../../context/ExchangeRatesContext";
-
-interface ConversionState {
-    USDT: string;
-    VES: string;
-    EUR: string;
-}
-
-interface SummaryResponse {
-    totalBalance: string;
-    unassignedBalance: string;
-    totalConverted: ConversionState;
-}
 
 export const formatter = new Intl.NumberFormat('en-US', {
     style: 'decimal',
@@ -30,13 +15,7 @@ export const formatter = new Intl.NumberFormat('en-US', {
 
 
 function Home() {
-    const { user } = useAuth();
     const exchangeRates = useRates();
-
-    const [ totalBalance, setTotalBalance ] = useState({
-        integer: '0',
-        decimal: '00'
-    });
 
     const setTitle = useTitleContext();
 
@@ -86,7 +65,7 @@ function Home() {
             <section style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '15px' }}>
                 <h3 style={{ color: '#535353' }}>Tasas de cambio</h3>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                    { exchangeRates && Object.entries(exchangeRates.rates).map(([currency, amount]) => (
+                    { exchangeRates && Object.entries(exchangeRates.rates).map(([currency]) => (
                         <div key={currency} 
                             style={{ 
                                 backgroundColor: '#192126', 

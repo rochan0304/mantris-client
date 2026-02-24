@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type ChangeEvent } from "react";
+import React, { useEffect, useState } from "react";
 import { useTitleContext } from "../../../layouts/ModuleLayout";
 import CheckBoxInput from "../../../components/ui/CheckboxInput";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -108,8 +108,8 @@ function CreateSpent() {
         console.log(formData);
 
         try {
-            const response = await createSpent(formData);
-            console.log(response);
+            await createSpent(formData);
+            navigate('/account', { state: formData.currencyId })
         } catch (error) {
             console.log(error);
         } finally {
