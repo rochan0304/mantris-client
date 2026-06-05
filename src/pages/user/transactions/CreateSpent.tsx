@@ -101,6 +101,8 @@ function CreateSpent() {
         }));
     }
 
+    console.log(formData);
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         showLoading();

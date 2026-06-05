@@ -203,10 +203,12 @@ function AssignmentPage() {
                         </div>
             <section style={{ display: 'flex', flexDirection: 'column', gap: '20px'}}>
                 { shownAssignments && shownAssignments.map(assignment => (
-                    <div key={assignment.id}
+                    <Link to={assignment.id} state={{assignment}} key={assignment.id}
                         style={{ 
                             position: 'relative',
                             overflow: 'hidden',
+                            textDecoration: 'none',
+                            color: 'white'
                         }}
                     >
                         <AssignmentCard
@@ -214,6 +216,7 @@ function AssignmentPage() {
                             currency={user!.baseCurrency.symbol}
                             className={ styles.card }
                         />
+                        {/*                         
                         <div
                             className={ styles.delete } 
                             style={{
@@ -247,8 +250,8 @@ function AssignmentPage() {
                                     <MyButton variant="secondary" onClick={handleClick} style={{ backgroundColor: '#252C31'}}>Cancelar</MyButton>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </div> */}
+                    </Link>
                 ))}
             </section>
         </div>

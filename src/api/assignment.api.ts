@@ -8,6 +8,10 @@ export const createAssignment = (data: CreateAssignmentData) => {
     return assignmentApi.post('/', data);
 };
 
+export const editAssignment = (id: string, data: CreateAssignmentData) => {
+    return assignmentApi.put(id, data);
+}
+
 export const getAssignments = (): Promise<GetAssignmentsResponse> => {
     return assignmentApi.get('/');
 }

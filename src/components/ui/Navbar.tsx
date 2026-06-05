@@ -5,9 +5,10 @@ import { BsBarChartLine } from "react-icons/bs";
 import { SlHome } from "react-icons/sl";
 import { GiConcentrationOrb } from "react-icons/gi";
 import { useAuth } from "../../context/AuthContext";
-import { RxExit } from "react-icons/rx";
+import { RiApps2Line } from "react-icons/ri";
+import { CiUser } from "react-icons/ci";
 
-type Pages = '/home' | '/assignment' | '/account' | '/exit';
+type Pages = '/home' | '/assignment' | '/account' | '/menu';
 
 const Navbar = () => {
     const location = useLocation();
@@ -25,11 +26,7 @@ const Navbar = () => {
                     </Link>
                 </div>
                 <Link to='/account' className={ styles.navbarLink } style={{ color: isActive('/account') ? '#A6FF00' : '#8F9395' }}><BsWallet2 /></Link>
-                <div 
-                    className={ styles.navbarLink } 
-                    style={{ color: isActive('/exit') ? '#A6FF00' : '#8F9395' }}
-                    onClick={logout}
-                ><RxExit /></div>
+                <Link to='/menu' className={ styles.navbarLink } style={{ color: isActive('/menu') ? '#A6FF00' : '#8F9395' }}><RiApps2Line/></Link>
             </nav>
         </div>
     );

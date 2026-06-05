@@ -19,6 +19,9 @@ import CustomModuleLayout from './layouts/CustomModuleLayout'
 import TransferAccount from './pages/user/accounts/TransferAccount'
 import TransferAssignment from './pages/user/assignments/TransferAssignment'
 import WelcomePage from './pages/public/Welcome'
+import ShowAssignment from './pages/user/assignments/ShowAssignment'
+import EditAssignment from './pages/user/assignments/EditAssignment'
+import MenuPage from './pages/user/menu/MenuPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -35,7 +38,7 @@ function App() {
           <Route path='/home' element={<Home />}/>
           <Route path='/assignment' element={<AssignmentPage />}/>
           <Route path='/account' element={<AccountsPage />}/>
-          <Route path='/profile' />
+          <Route path='/menu' element={<MenuPage />}/>
         </Route>
         
         <Route element={<EditLayout/>}>
@@ -45,6 +48,8 @@ function App() {
           <Route path='/spent' element={<CreateSpent />}/>
           <Route path='/account/transfer' element={<TransferAccount />}/>
           <Route path='/assignment/transfer' element={<TransferAssignment />}/>
+          <Route path='/assignment/:id' element={<ShowAssignment />}/>
+          <Route path='/assignment/edit' element={<EditAssignment />}/>
         </Route>
 
         <Route element={<CustomModuleLayout />}>
