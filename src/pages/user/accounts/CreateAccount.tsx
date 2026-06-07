@@ -36,7 +36,7 @@ function CreateAccount() {
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(prev => ({
             ...prev,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.type === 'number' ? Number(e.target.value) : e.target.value
         }))
     };
 
@@ -45,6 +45,7 @@ function CreateAccount() {
         e.preventDefault();
 
         try {
+            console.log(formData);
             const response = await createAccount(formData); 
             navigate('/account', { state: currentCurrency })
         } catch (error) {
